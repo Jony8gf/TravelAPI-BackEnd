@@ -21,11 +21,11 @@ namespace TravelAPI_BackEnd.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
     public class PromocionController : ControllerBase
     {
-        private readonly ILogger<TipoActividadController> logger;
+        private readonly ILogger<PromocionController> logger;
         private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
 
-        public PromocionController(ILogger<TipoActividadController> logger,
+        public PromocionController(ILogger<PromocionController> logger,
             ApplicationDbContext context,
              IMapper mapper)
         {

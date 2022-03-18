@@ -37,7 +37,7 @@ namespace TravelAPI_BackEnd.Controllers
         [HttpGet("list")]
         public async Task<ActionResult<List<TipoActividadViewModel>>> Get([FromQuery] PaginacionViewModel paginacionVM)
         {
-            var queryable = context.TipoActividad.AsQueryable();
+            var queryable = context.TipoActividades.AsQueryable();
             await HttpContext.InsertarParametrosPaginacionEnCabecera(queryable);
             var tipoActividads = await queryable.OrderBy(x => x.Nombre).Paginar(paginacionVM).ToListAsync();
             return mapper.Map<List<TipoActividadViewModel>>(tipoActividads);
@@ -48,7 +48,7 @@ namespace TravelAPI_BackEnd.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<List<TipoActividadViewModel>>> Todos()
         {
-            var tipoActividads = await context.TipoActividad.OrderBy(x => x.Nombre).ToListAsync();
+            var tipoActividads = await context.TipoActividades.OrderBy(x => x.Nombre).ToListAsync();
             return mapper.Map<List<TipoActividadViewModel>>(tipoActividads);
         }
 
@@ -65,7 +65,7 @@ namespace TravelAPI_BackEnd.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Put(int Id, [FromBody] TipoActividadCreacionViewModel tipoActividadCreacionVM)
         {
-            var tipoActividad = await context.TipoActividad.FirstOrDefaultAsync(x => x.Id == Id);
+            var tipoActividad = await context.TipoActividades.FirstOrDefaultAsync(x => x.Id == Id);
 
             if (tipoActividad == null)
                 return NotFound();
@@ -80,7 +80,7 @@ namespace TravelAPI_BackEnd.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int Id)
         {
-            var existe = await context.TipoActividad.AnyAsync(x => x.Id == Id);
+            var existe = await context.TipoActividades.AnyAsync(x => x.Id == Id);
 
             if (!existe)
             {
@@ -95,7 +95,7 @@ namespace TravelAPI_BackEnd.Controllers
         [HttpGet("{Id:int}")]
         public async Task<ActionResult<TipoActividadViewModel>> Get(int Id)
         {
-            var tipoActividad = await context.TipoActividad.FirstOrDefaultAsync(x => x.Id == Id);
+            var tipoActividad = await context.TipoActividades.FirstOrDefaultAsync(x => x.Id == Id);
 
             if (tipoActividad == null)
                 return NotFound();
