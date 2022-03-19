@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,7 +19,7 @@ namespace TravelAPI_BackEnd.ViewModels
 
         [StringLength(maximumLength: 250)]
         public string Descripcion { get; set; }
-        public string Foto { get; set; }
+        public IFormFile Foto { get; set; }
 
         [Range(-90, 90)]
         public double Latitud { get; set; }

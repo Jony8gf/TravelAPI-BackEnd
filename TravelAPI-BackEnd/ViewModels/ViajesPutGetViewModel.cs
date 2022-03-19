@@ -7,7 +7,7 @@ namespace TravelAPI_BackEnd.ViewModels
 {
     public class ViajesPutGetViewModel
     {
-        public ViajeViewModel Pelicula { get; set; }
+        public ViajeViewModel Viaje { get; set; }
         public List<TipoActividadViewModel> TipoActividadesSeleccionados { get; set; }
         public List<TipoActividadViewModel> TipoActividadesNoSeleccionados { get; set; }
         public List<PromocionViewModel> PromocionesNoSeleccionados { get; set; }

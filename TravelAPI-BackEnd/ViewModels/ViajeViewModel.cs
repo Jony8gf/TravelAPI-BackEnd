@@ -20,8 +20,8 @@ namespace TravelAPI_BackEnd.ViewModels
         [Range(0.01, 99999.99)]
         public decimal Precio { get; set; }
 
-        public List<ViajeTipoActividad> TipoActividades { get; set; }
+        public List<TipoActividadViewModel> TipoActividades { get; set; }
 
-        public List<ViajePromocion> Promociones { get; set; }
+        public List<PromocionViewModel> Promociones { get; set; }
     }
 }
