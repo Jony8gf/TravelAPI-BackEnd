@@ -40,6 +40,41 @@ namespace TravelAPI_BackEnd.Controllers
             this.userManager = userManager;
         }
 
+        [HttpGet("filtrar")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<ViajeViewModel>>> Filtrar([FromQuery] ViajesFiltrarViewModel viajesFiltrarVM)
+        {
+            var viajesQueryable = context.Viajes.AsQueryable();
+            if (!string.IsNullOrEmpty(viajesFiltrarVM.Lugar))
+            {
+                viajesQueryable = viajesQueryable.Where(x => x.Lugar.Contains(viajesFiltrarVM.Lugar));
+            }
+
+            if (!string.IsNullOrEmpty(viajesFiltrarVM.Pais))
+            {
+                viajesQueryable = viajesQueryable.Where(x => x.Pais.Contains(viajesFiltrarVM.Pais));
+            }
+
+            if (viajesFiltrarVM.PromocionId != 0)
+            {
+                viajesQueryable = viajesQueryable
+                    .Where(x => x.ViajePromociones.Select(y => y.PromocionId)
+                    .Contains(viajesFiltrarVM.PromocionId));
+            }
+
+            if (viajesFiltrarVM.TipoActividadId != 0)
+            {
+                viajesQueryable = viajesQueryable
+                    .Where(x => x.ViajeTipoActividades.Select(y => y.TipoActividadId)
+                    .Contains(viajesFiltrarVM.TipoActividadId));
+            }
+
+            await HttpContext.InsertarParametrosPaginacionEnCabecera(viajesQueryable);
+            var peliculas = await viajesQueryable.Paginar(viajesFiltrarVM.PaginacionView).ToListAsync();
+            return mapper.Map<List<ViajeViewModel>>(peliculas);
+
+        }
+
 
         [HttpPost]
         public async Task<ActionResult> Post([FromForm] ViajeCreacionViewModel viajeCreacionVM)
