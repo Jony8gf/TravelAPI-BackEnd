@@ -70,10 +70,45 @@ namespace TravelAPI_BackEnd.Controllers
             }
 
             await HttpContext.InsertarParametrosPaginacionEnCabecera(viajesQueryable);
-            var peliculas = await viajesQueryable.Paginar(viajesFiltrarVM.PaginacionView).ToListAsync();
-            return mapper.Map<List<ViajeViewModel>>(peliculas);
+            var viajes = await viajesQueryable.Paginar(viajesFiltrarVM.PaginacionView).ToListAsync();
+            return mapper.Map<List<ViajeViewModel>>(viajes);
 
         }
+
+        [HttpGet("All")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<ViajesDescuentosViewModel>>> All()
+        {
+            var viajes = await context.Viajes
+                .Include(x => x.ViajePromociones).ThenInclude(x => x.Promocion)
+                .Include(x => x.ViajeTipoActividades).ThenInclude(x => x.TipoActividad).ToListAsync();
+
+            List<ViajesDescuentosViewModel> viajesDescuentos = new List<ViajesDescuentosViewModel>();
+
+            foreach (var v in viajes)
+            {
+                foreach(var vi in v.ViajePromociones)
+                {
+                    ViajesDescuentosViewModel viajeAux = new()
+                    {
+                        Id = v.Id,
+                        Lugar = v.Lugar,
+                        Pais = v.Pais,
+                        Foto = v.Foto,
+                        Descripcion = v.Descripcion,
+                        Precio = v.Precio,
+                        Latitud = v.Ubicacion.Y,
+                        Longitud = v.Ubicacion.X,
+                        //ViajeTipoActividades = (List<string>)v.ViajeTipoActividades.Select(x => x.TipoActividad.Nombre),
+                        PrecioDescuento = v.Precio - ((v.Precio * vi.Promocion.PorcentajeDescuento) / 100)
+                    };
+                    viajesDescuentos.Add(viajeAux);
+                }       
+            }
+
+            return mapper.Map<List<ViajesDescuentosViewModel>>(viajesDescuentos);
+        }
+
 
 
         [HttpPost]
